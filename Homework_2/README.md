@@ -1,7 +1,7 @@
 **1 task** \
 locate my.cnf \
 sudo nano /etc/mysql/my.cnf \
-[client] \
+[mysql] \
 user=root \
 password=root123
 
