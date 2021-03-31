@@ -50,5 +50,13 @@ SELECT target_id, COUNT(*) as "Количество лайков" FROM (
 SELECT target_id FROM likes INNER JOIN (
 SELECT user_id FROM profiles ORDER BY birthday DESC) profiles on profiles.user_id = likes.target_id) rt GROUP BY target_id LIMIT 10;
 
--- задание 5 не успел сделать, доделаю потом
+-- задание 5 
+SELECT 
+  CONCAT(first_name, ' ', last_name) AS user, 
+	(SELECT COUNT(*) FROM likes WHERE likes.user_id = profiles.user_id) +
+	(SELECT COUNT(*) FROM media WHERE media.user_id = profiles.user_id) +
+	(SELECT COUNT(*) FROM messages WHERE messages.from_user_id = profiles.user_id) AS overall_activity 
+	  FROM profiles
+	  ORDER BY overall_activity
+	  LIMIT 10;
 
