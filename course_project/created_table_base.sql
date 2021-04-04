@@ -140,3 +140,9 @@ ADD favorite_address int UNSIGNED NOT NULL COMMENT "Любимые адреса";
 
 ALTER TABLE orders 
 ADD type_order int UNSIGNED NOT NULL COMMENT "Тип заказа";
+
+ALTER TABLE orders 
+ADD raiting_driver int NOT NULL COMMENT "Оценка водителя";
+
+ALTER TABLE orders 
+ADD raiting_user int NOT NULL COMMENT "Оценка пользователя";
