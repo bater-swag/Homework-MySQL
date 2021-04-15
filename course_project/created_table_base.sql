@@ -170,7 +170,8 @@ ALTER TABLE orders
 ADD raiting_user int NOT NULL COMMENT "Оценка пользователя";
 
 
--- наполнение данными 
+-- наполнение данными в основном использовал сервис filldb.info
+
 INSERT INTO type_order (oreder_type) VALUES ('Delivery'), ('The cheapest'), ('Kids'), ('Black');
 INSERT INTO car_type (class) VALUES ('Minivan'), ('Premium sedan'), ('Economy sedan'), ('SUV'), ('Station wagon');
 INSERT INTO status_order (status) VALUES ('Order created'), ('Search for a performer'), ('Waiting for the car'), ('Start of execution'), ('End of trip'), ('Waiting for payment'), ('Order cancelled'), ('Order completed');
