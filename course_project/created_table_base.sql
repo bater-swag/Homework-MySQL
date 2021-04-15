@@ -286,6 +286,63 @@ SELECT driver_id, sum(raiting_driver)/count(raiting_driver) AS sum_raiting
   LIMIT 1
 ;
 
+-- представления 
+DROP VIEW information_driver_fav_car;
+
+CREATE VIEW information_driver_fav_car 
+as SELECT driver_users.first_name, cars_info.car_type , orders.id 
+FROM driver_users, orders, cars_info
+WHERE driver_users.id=orders.driver_id and orders.car_id = cars_info.id 
+ORDER BY driver_users.first_name;
+
+SELECT * FROM information_driver_fav_car;
+
+DROP VIEW information_city;
+
+CREATE VIEW information_city
+as SELECT orders.id , address.city as address_city, driver_users.city as driver_city
+FROM orders, address, driver_users
+WHERE driver_users.id=orders.driver_id and address.city = driver_users.city  
+ORDER BY orders.id;
+
+SELECT * FROM information_city;
+
+-- процедуры/триггеры;
+DELIMITER //
+CREATE PROCEDURE OrdersSummaryInf()
+BEGIN
+  SELECT orders.id AS orders, driver_users.phone, users.phone 
+  FROM orders 
+  INNER JOIN driver_users ON driver_users.id = orders.driver_id 
+  INNER JOIN users ON users.id = orders.user_id
+END//
+DELIMITER ;
+
+CALL OrdersSummaryInf();
+
+DROP PROCEDURE IF EXISTS information();
+CREATE PROCEDURE information()
+BEGIN
+SELECT NOW() AS Time , VERSION() AS Version, COUNT(id) FROM orders;
+END//
+
+CALL information();
 
 
+DELIMITER //
+CREATE TRIGGER validate_first_name_description_insert BEFORE INSERT ON users FOR EACH ROW
+BEGIN
+  IF NEW.first_name IS NULL AND NEW.description IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Cannot INSERT if first_name & description are NULL';
+  END IF;
+END//
 
+CREATE TRIGGER validate_name_description_update BEFORE UPDATE ON driver_users FOR EACH ROW
+BEGIN
+  IF NEW.phone IS NULL AND NEW.description IS NULL THEN
+    SIGNAL SQLSTATE '45000'
+    SET MESSAGE_TEXT = 'Cannot UPDATE if phone & description are NULL';
+  END IF;
+END//
+DELIMITER ;
